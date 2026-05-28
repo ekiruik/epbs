@@ -266,25 +266,44 @@ function renderActions(){
   </tr>`).join(''):'<tr><td colspan="6" style="color:#64748b;padding:10px">No action plans found</td></tr>';
 }
 
-async function loadData(){
+function loadData(){
   document.getElementById('statusDot').className='dot grey';
   document.getElementById('bannerText').textContent='Connecting to Google Sheets...';
-  try{
-    const res = await fetch(APPS_SCRIPT_URL + '?format=json');
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const json = await res.json();
-    allRows    = normalise(json.data||[]);
-    actionRows = json.actions||[];
-    document.getElementById('statusDot').className='dot';
-    document.getElementById('bannerText').innerHTML=
-      '<b>'+allRows.length+'</b> records from Google Sheets &nbsp;&middot;&nbsp; Last sync: <b>'+new Date().toLocaleTimeString()+'</b>';
-    populateFilters();
-    applyFilters();
-  }catch(e){
-    document.getElementById('statusDot').className='dot grey';
-    document.getElementById('bannerText').innerHTML='Could not load data: '+e.message+' &mdash; check Apps Script URL';
-    document.getElementById('kpiRow').innerHTML='<div style="color:#ef4444;padding:20px;font-size:12px;text-align:center">Failed to connect to Google Sheets.<br>Check the APPS_SCRIPT_URL in this file.</div>';
-  }
+  // Remove old script tag if exists
+  const old=document.getElementById('jsonp-script');
+  if(old) old.remove();
+  // JSONP — works cross-origin without CORS issues
+  window._jsonpCallback=function(json){
+    try{
+      allRows    = normalise(json.data||[]);
+      actionRows = json.actions||[];
+      document.getElementById('statusDot').className='dot';
+      document.getElementById('bannerText').innerHTML=
+        '<b>'+allRows.length+'</b> records from Google Sheets &nbsp;&middot;&nbsp; Last sync: <b>'+new Date().toLocaleTimeString()+'</b>';
+      populateFilters();
+      applyFilters();
+    }catch(e){
+      showError(e.message);
+    }
+  };
+  window._jsonpError=function(){
+    showError('Could not reach Apps Script URL');
+  };
+  const script=document.createElement('script');
+  script.id='jsonp-script';
+  script.src=APPS_SCRIPT_URL+'?format=json&callback=_jsonpCallback';
+  script.onerror=window._jsonpError;
+  document.head.appendChild(script);
+  // Timeout fallback
+  setTimeout(function(){
+    if(!allRows.length) showError('Timed out — check Apps Script is deployed as Anyone can access');
+  },10000);
+}
+
+function showError(msg){
+  document.getElementById('statusDot').className='dot grey';
+  document.getElementById('bannerText').innerHTML='Could not load data: '+msg;
+  document.getElementById('kpiRow').innerHTML='<div style="color:#ef4444;padding:20px;font-size:12px;text-align:center">Failed to connect to Google Sheets.<br>See steps below.</div>';
 }
 
 loadData();
