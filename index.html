@@ -9,27 +9,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{
-  --bg:#1a0a2e;
-  --surface:#241040;
-  --surface2:#2e1654;
-  --border:rgba(180,140,255,0.15);
-  --accent:#c084fc;
-  --accent2:#a855f7;
-  --accent3:#e879f9;
-  --text:#f3e8ff;
-  --muted:#a78bca;
-  --danger:#f87171;
-  --success:#86efac;
-  --warn:#fcd34d;
-  --font:"DM Sans",sans-serif;
-  --mono:"DM Mono",monospace;
-  --header-border:#7c3aed;
-}
+:root{--bg:#1a0a2e;--surface:#241040;--surface2:#2e1654;--border:rgba(180,140,255,0.15);--accent:#c084fc;--accent2:#a855f7;--accent3:#e879f9;--text:#f3e8ff;--muted:#a78bca;--danger:#f87171;--success:#86efac;--warn:#fcd34d;--font:"DM Sans",sans-serif;--mono:"DM Mono",monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;min-height:100vh}
-
-/* ── HEADER ── */
 .header{background:#fff;border-bottom:4px solid #7c3aed}
 .logo-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;gap:16px}
 .logo-box{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
@@ -42,32 +24,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .title-bar{background:linear-gradient(135deg,#4c1d95,#7c3aed,#a21caf);text-align:center;padding:11px 24px 13px}
 .title-bar h1{font-size:15px;font-weight:700;color:#fff;letter-spacing:.07em;text-transform:uppercase}
 .title-bar p{font-size:10px;color:rgba(255,255,255,.85);margin-top:3px}
-
-/* ── FILTERS ── */
 .filterbar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--border);align-items:center}
 select{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-family:var(--font);font-size:11px;cursor:pointer}
 select:focus{outline:none;border-color:var(--accent)}
-.refresh{margin-left:auto;background:var(--accent2);color:#fff;border:none;border-radius:6px;padding:6px 16px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer}
+.refresh{background:var(--accent2);color:#fff;border:none;border-radius:6px;padding:6px 16px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer}
 .refresh:hover{background:var(--accent3)}
-
-/* ── MAIN ── */
+.pdf-btn{margin-left:auto;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:6px 14px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
+.pdf-btn:hover{background:rgba(192,132,252,.15)}
+.pdf-btn.loading{opacity:.6;cursor:not-allowed}
 .main{padding:16px 24px;display:flex;flex-direction:column;gap:14px}
 .banner{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:9px 14px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .banner b{color:var(--text)}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--success);animation:pulse 2s infinite;flex-shrink:0}
 .dot.off{background:var(--muted);animation:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* ── KPIs ── */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;border-bottom:3px solid transparent;transition:border-color .2s}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;border-bottom:3px solid transparent}
 .kpi.g{border-bottom-color:#86efac}.kpi.a{border-bottom-color:#fcd34d}.kpi.r{border-bottom-color:#f87171}
 .kpi-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
 .kpi-val{font-size:26px;font-weight:600;font-family:var(--mono);line-height:1;color:var(--text)}
 .kpi-tgt{font-size:9px;margin-top:4px}
 .kpi-tgt.met{color:#86efac}.kpi-tgt.near{color:#fcd34d}.kpi-tgt.miss{color:#f87171}
-
-/* ── PANELS ── */
 .panels{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px}
 .full{grid-column:1/-1}
@@ -105,7 +82,6 @@ select:focus{outline:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="logo-bar">
     <div class="logo-box">
@@ -129,7 +105,6 @@ select:focus{outline:none;border-color:var(--accent)}
     <p>Assessing Outcomes in HIV Prevention and Treatment Programmes with Key Populations &mdash; Nairobi, Kenya</p>
   </div>
 </div>
-
 <div class="filterbar">
   <select id="fCounty" onchange="applyFilters()"><option value="all">All Counties</option></select>
   <select id="fSite"   onchange="applyFilters()"><option value="all">All Sites</option></select>
@@ -148,28 +123,19 @@ select:focus{outline:none;border-color:var(--accent)}
     Download PDF
   </button>
 </div>
-
 <div class="main">
-  <div class="banner">
-    <div class="dot off" id="statusDot"></div>
-    <span id="bannerText">Connecting to Google Sheets&hellip;</span>
-  </div>
-  <div class="kpis" id="kpiRow">
-    <div class="spin-wrap"><div class="spinner"></div>Loading live data&hellip;</div>
-  </div>
+  <div class="banner"><div class="dot off" id="statusDot"></div><span id="bannerText">Connecting to Google Sheets&hellip;</span></div>
+  <div class="kpis" id="kpiRow"><div class="spin-wrap"><div class="spinner"></div>Loading live data&hellip;</div></div>
   <div class="panels" id="panels" style="display:none">
     <div class="panel">
-      <div class="phead">
-        <div><div class="ptitle">Indicator trend by round</div><div class="psub">% YES across all sessions</div></div>
-        <span class="badge">Live</span>
-      </div>
+      <div class="phead"><div><div class="ptitle">Indicator trend by round</div><div class="psub">% YES across all sessions</div></div><span class="badge">Live</span></div>
       <div class="legend">
         <span class="li"><span class="lsq" style="background:#c084fc"></span>Condom</span>
         <span class="li"><span class="lsq" style="background:#e879f9"></span>HIV test</span>
         <span class="li"><span class="lsq" style="background:#f0abfc"></span>PrEP</span>
         <span class="li"><span class="lsq" style="background:rgba(255,255,255,.2)"></span>Target 80%</span>
       </div>
-      <div style="position:relative;height:180px"><canvas id="trendChart" role="img" aria-label="Trend chart">Trend data.</canvas></div>
+      <div style="position:relative;height:180px"><canvas id="trendChart"></canvas></div>
     </div>
     <div class="panel">
       <div class="phead"><div><div class="ptitle">Barriers reported</div><div class="psub">% YES &mdash; latest round</div></div></div>
@@ -187,7 +153,6 @@ select:focus{outline:none;border-color:var(--accent)}
     </div>
   </div>
 </div>
-
 <script>
 const APPS_URL='https://script.google.com/macros/s/AKfycbwfWEOPpMbt7qbY8YkYTwSiUaPVTR9lj1acWfHEQbkK4ltmoPX9_OSZtzwGkdjVi0ofog/exec';
 const VAR_MAP=[
@@ -284,10 +249,42 @@ function showErr(){
     1. Open Google Sheet &rarr; <b>Extensions &rarr; Apps Script</b><br>
     2. Click <b>Deploy &rarr; Manage deployments &rarr; pencil icon</b><br>
     3. Set <b>Who has access</b> to <b>Anyone</b><br>
-    4. Replace Code.gs with the correct version Claude provided<br>
-    5. Version &rarr; <b>New version</b> &rarr; <b>Deploy</b><br>
-    6. Click <b>&#8635; Refresh</b> above
+    4. Replace Code.gs with correct version &rarr; New version &rarr; Deploy<br>
+    5. Click <b>&#8635; Refresh</b> above
   </div>`;
+}
+function downloadPDF(){
+  const btn=document.getElementById('pdfBtn');
+  btn.classList.add('loading');
+  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generating...';
+  const {jsPDF}=window.jspdf;
+  html2canvas(document.body,{scale:1.5,useCORS:true,allowTaint:true,backgroundColor:'#1a0a2e',logging:false,windowWidth:1280}).then(canvas=>{
+    const imgData=canvas.toDataURL('image/jpeg',0.92);
+    const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a3'});
+    const pdfW=pdf.internal.pageSize.getWidth(),pdfH=pdf.internal.pageSize.getHeight();
+    const imgH=pdfW*(canvas.height/canvas.width);
+    if(imgH<=pdfH){pdf.addImage(imgData,'JPEG',0,0,pdfW,imgH);}
+    else{
+      let yOff=0;const pageCanvasH=canvas.width*(pdfH/pdfW);let pg=0;
+      while(yOff<canvas.height){
+        const pc=document.createElement('canvas');pc.width=canvas.width;pc.height=Math.min(pageCanvasH,canvas.height-yOff);
+        pc.getContext('2d').drawImage(canvas,0,-yOff);
+        const pd=pc.toDataURL('image/jpeg',0.92);
+        if(pg>0)pdf.addPage();
+        pdf.addImage(pd,'JPEG',0,0,pdfW,pdfW*(pc.height/canvas.width));
+        yOff+=pageCanvasH;pg++;
+      }
+    }
+    pdf.setProperties({title:'ePBS Dashboard — NASCOP/KRCS',author:'NASCOP / Kenya Red Cross Society'});
+    const date=new Date().toISOString().slice(0,10);
+    pdf.save(`ePBS_Dashboard_${date}.pdf`);
+    btn.classList.remove('loading');
+    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF';
+  }).catch(()=>{
+    btn.classList.remove('loading');
+    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF';
+    alert('PDF failed. Use browser Print → Save as PDF instead.');
+  });
 }
 function loadData(){
   document.getElementById('statusDot').className='dot off';
