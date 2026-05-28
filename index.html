@@ -8,8 +8,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
-:root{--bg:#1a0a2e;--surface:#241040;--surface2:#2e1654;--border:rgba(180,140,255,0.15);--accent:#c084fc;--accent2:#a855f7;--accent3:#e879f9;--text:#f3e8ff;--muted:#a78bca;--danger:#f87171;--success:#86efac;--warn:#fcd34d;--font:"DM Sans",sans-serif;--mono:"DM Mono",monospace}
+:root{--bg:#1a0a2e;--surface:#241040;--surface2:#2e1654;--border:rgba(180,140,255,0.15);--accent:#c084fc;--accent2:#a855f7;--accent3:#e879f9;--text:#f3e8ff;--muted:#a78bca;--font:"DM Sans",sans-serif;--mono:"DM Mono",monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;min-height:100vh}
 .header{background:#fff;border-bottom:4px solid #7c3aed}
@@ -26,16 +27,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .title-bar p{font-size:10px;color:rgba(255,255,255,.85);margin-top:3px}
 .filterbar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--border);align-items:center}
 select{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-family:var(--font);font-size:11px;cursor:pointer}
-select:focus{outline:none;border-color:var(--accent)}
 .refresh{background:var(--accent2);color:#fff;border:none;border-radius:6px;padding:6px 16px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer}
-.refresh:hover{background:var(--accent3)}
-.pdf-btn{margin-left:auto;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:6px 14px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
-.pdf-btn:hover{background:rgba(192,132,252,.15)}
-.pdf-btn.loading{opacity:.6;cursor:not-allowed}
+.pdf-btn{margin-left:auto;background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:6px 14px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer}
 .main{padding:16px 24px;display:flex;flex-direction:column;gap:14px}
 .banner{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:9px 14px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .banner b{color:var(--text)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--success);animation:pulse 2s infinite;flex-shrink:0}
+.dot{width:7px;height:7px;border-radius:50%;background:#86efac;animation:pulse 2s infinite;flex-shrink:0}
 .dot.off{background:var(--muted);animation:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
@@ -78,7 +75,6 @@ select:focus{outline:none;border-color:var(--accent)}
 .spinner{width:30px;height:30px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .err-box{background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.25);border-radius:8px;padding:16px 20px;font-size:12px;color:#e9d5ff;line-height:1.9;grid-column:1/-1}
-.err-box b{color:#fff}
 </style>
 </head>
 <body>
@@ -118,14 +114,11 @@ select:focus{outline:none;border-color:var(--accent)}
     <option>R1</option><option>R2</option><option>R3</option><option>R4</option><option>R5</option>
   </select>
   <button class="refresh" onclick="loadData()">&#8635; Refresh</button>
-  <button class="pdf-btn" id="pdfBtn" onclick="downloadPDF()">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    Download PDF
-  </button>
+  <button class="pdf-btn" id="pdfBtn" onclick="downloadPDF()">&#11015; Download PDF</button>
 </div>
 <div class="main">
-  <div class="banner"><div class="dot off" id="statusDot"></div><span id="bannerText">Connecting to Google Sheets&hellip;</span></div>
-  <div class="kpis" id="kpiRow"><div class="spin-wrap"><div class="spinner"></div>Loading live data&hellip;</div></div>
+  <div class="banner"><div class="dot off" id="statusDot"></div><span id="bannerText">Loading from Google Sheets&hellip;</span></div>
+  <div class="kpis" id="kpiRow"><div class="spin-wrap"><div class="spinner"></div>Loading&hellip;</div></div>
   <div class="panels" id="panels" style="display:none">
     <div class="panel">
       <div class="phead"><div><div class="ptitle">Indicator trend by round</div><div class="psub">% YES across all sessions</div></div><span class="badge">Live</span></div>
@@ -133,7 +126,6 @@ select:focus{outline:none;border-color:var(--accent)}
         <span class="li"><span class="lsq" style="background:#c084fc"></span>Condom</span>
         <span class="li"><span class="lsq" style="background:#e879f9"></span>HIV test</span>
         <span class="li"><span class="lsq" style="background:#f0abfc"></span>PrEP</span>
-        <span class="li"><span class="lsq" style="background:rgba(255,255,255,.2)"></span>Target 80%</span>
       </div>
       <div style="position:relative;height:180px"><canvas id="trendChart"></canvas></div>
     </div>
@@ -143,164 +135,157 @@ select:focus{outline:none;border-color:var(--accent)}
     </div>
     <div class="panel full">
       <div class="ptitle" style="margin-bottom:2px">Cross-site heat map</div>
-      <div class="psub">Key indicators &mdash; all sites &nbsp;&middot;&nbsp; Green &ge; target &middot; Amber within 10% &middot; Red below</div>
+      <div class="psub">Key indicators &mdash; Green &ge; target &middot; Amber within 10% &middot; Red below</div>
       <div style="overflow-x:auto"><table class="ht"><thead><tr><th>Site</th><th>County</th><th>Condom</th><th>HIV test</th><th>PrEP</th><th>ART</th><th>Satisfied</th></tr></thead><tbody id="heatBody"></tbody></table></div>
     </div>
     <div class="panel full">
       <div class="ptitle" style="margin-bottom:2px">Action plan tracker</div>
-      <div class="psub">Site-level actions from ActionPlans sheet</div>
+      <div class="psub">Site-level actions</div>
       <table class="at"><thead><tr><th>Site</th><th>County</th><th>Action</th><th>Lead</th><th>Deadline</th><th>Status</th></tr></thead><tbody id="actionBody"></tbody></table>
     </div>
   </div>
 </div>
 <script>
-const APPS_URL='https://script.google.com/macros/s/AKfycbwIghKqblaZ4_bJRWYtEwWIM9HOKJfX7NMJ6mpsju4-ExXJ0_QgjgCZYY0WDMVZLuIe/exec';
-const VAR_MAP=[
-  {q:4, var:'condom_lastsex',label:'Condom use last sex',  target:80},
-  {q:13,var:'hiv_test',      label:'HIV test last 3mo',    target:60},
-  {q:21,var:'prep_current',  label:'Currently on PrEP',    target:50},
-  {q:16,var:'art_enrolled',  label:'ART enrolled (PLHIV)', target:90},
-  {q:33,var:'satisfied',     label:'Satisfied w/ services',target:75},
-  {q:34,var:'respect',       label:'Staff respectful',     target:80},
+var SHEET_ID = '1mjAys5CBaxTNAGyVwe1uez2iW_AuOqC6KFqipFZLbck';
+var AGG_GID  = '1928468162';
+var ACT_GID  = '0';
+
+function csvUrl(gid) {
+  return 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=' + gid;
+}
+
+var VAR_MAP=[
+  {q:4, v:'condom_lastsex',label:'Condom use last sex',  t:80},
+  {q:13,v:'hiv_test',      label:'HIV test last 3mo',    t:60},
+  {q:21,v:'prep_current',  label:'Currently on PrEP',    t:50},
+  {q:16,v:'art_enrolled',  label:'ART enrolled (PLHIV)', t:90},
+  {q:33,v:'satisfied',     label:'Satisfied services',   t:75},
+  {q:34,v:'respect',       label:'Staff respectful',     t:80},
 ];
-const BARRIERS=[
-  {var:'stigma',         label:'Stigma at facility',   color:'#f87171'},
-  {var:'police_violence',label:'Police violence',       color:'#fb923c'},
-  {var:'peer_edu',       label:'Peer educator reached', color:'#86efac'},
-  {var:'services',       label:'Services accessed',     color:'#c084fc'},
+var BARRIERS=[
+  {v:'stigma',         label:'Stigma at facility',   color:'#f87171'},
+  {v:'police_violence',label:'Police violence',       color:'#fb923c'},
+  {v:'peer_edu',       label:'Peer educator reached', color:'#86efac'},
+  {v:'services',       label:'Services accessed',     color:'#c084fc'},
 ];
-function toNum(v){
-  if(!v&&v!==0)return 0;
-  const s=String(v).trim();
+function toNum(val){
+  if(!val&&val!==0)return 0;
+  var s=String(val).trim();
   if(s.endsWith('%'))return parseFloat(s)/100;
-  const n=parseFloat(s);return isNaN(n)?0:n>1?n/100:n;
+  var n=parseFloat(s);return isNaN(n)?0:n>1?n/100:n;
 }
 function norm(rows){
-  return rows.map(r=>({
+  return rows.map(function(r){return{
     county:r.County||r.county||'',site:r.Site||r.site||r['Site Name']||'',
     typology:r.Typology||r.typology||'',round:r.Round||r.round||'',
-    peer_edu:toNum(r.peer_edu),rights_info:toNum(r.rights_info),prevention:toNum(r.prevention),
-    condom_lastsex:toNum(r.condom_lastsex),services:toNum(r.services),hiv_test:toNum(r.hiv_test),
-    art_enrolled:toNum(r.art_enrolled),arv_taking:toNum(r.arv_taking),viral_supp:toNum(r.viral_supp),
-    prep_3mo:toNum(r.prep_3mo),prep_current:toNum(r.prep_current),sti_treated:toNum(r.sti_treated),
-    police_violence:toNum(r.police_violence),stigma:toNum(r.stigma),satisfied:toNum(r.satisfied),respect:toNum(r.respect),
-  }));
+    peer_edu:toNum(r.peer_edu),condom_lastsex:toNum(r.condom_lastsex),
+    services:toNum(r.services),hiv_test:toNum(r.hiv_test),
+    art_enrolled:toNum(r.art_enrolled),prep_current:toNum(r.prep_current),
+    police_violence:toNum(r.police_violence),stigma:toNum(r.stigma),
+    satisfied:toNum(r.satisfied),respect:toNum(r.respect),
+  };});
 }
-let allRows=[],actRows=[],filtRows=[],tChart=null;
-const avg=(rows,v)=>rows.length?rows.reduce((s,r)=>s+(r[v]||0),0)/rows.length:0;
-const pct=(rows,v)=>Math.round(avg(rows,v)*100);
-const cc=(v,t)=>v>=t?'g':v>=t-10?'a':'r';
-const hc=(v,t)=>v>=t?'hg':v>=t-10?'ha':'hr';
-const tc=(v,t)=>v>=t?'met':v>=t-10?'near':'miss';
+var allRows=[],actRows=[],filtRows=[],tChart=null;
+function avgF(rows,fld){return rows.length?rows.reduce(function(s,r){return s+(r[fld]||0);},0)/rows.length:0;}
+function pct(rows,fld){return Math.round(avgF(rows,fld)*100);}
+function cc(val,t){return val>=t?'g':val>=t-10?'a':'r';}
+function hc(val,t){return val>=t?'hg':val>=t-10?'ha':'hr';}
+function tc(val,t){return val>=t?'met':val>=t-10?'near':'miss';}
+
 function popFilters(){
-  const cs=document.getElementById('fCounty'),ss=document.getElementById('fSite');
-  [...new Set(allRows.map(r=>r.county))].sort().forEach(c=>{if(![...cs.options].some(o=>o.value===c)){const o=document.createElement('option');o.value=o.textContent=c;cs.appendChild(o);}});
-  [...new Set(allRows.map(r=>r.site))].sort().forEach(s=>{if(![...ss.options].some(o=>o.value===s)){const o=document.createElement('option');o.value=o.textContent=s;ss.appendChild(o);}});
+  var cs=document.getElementById('fCounty'),ss=document.getElementById('fSite');
+  [...new Set(allRows.map(function(r){return r.county;}))].sort().forEach(function(c){
+    if(![...cs.options].some(function(o){return o.value===c;})){var o=document.createElement('option');o.value=o.textContent=c;cs.appendChild(o);}
+  });
+  [...new Set(allRows.map(function(r){return r.site;}))].sort().forEach(function(s){
+    if(![...ss.options].some(function(o){return o.value===s;})){var o=document.createElement('option');o.value=o.textContent=s;ss.appendChild(o);}
+  });
 }
 function applyFilters(){
-  const co=document.getElementById('fCounty').value,si=document.getElementById('fSite').value,
-        ty=document.getElementById('fTyp').value,ro=document.getElementById('fRound').value;
-  filtRows=allRows.filter(r=>(co==='all'||r.county===co)&&(si==='all'||r.site===si)&&(ty==='all'||r.typology===ty)&&(ro==='all'||r.round===ro));
+  var co=document.getElementById('fCounty').value,si=document.getElementById('fSite').value,
+      ty=document.getElementById('fTyp').value,ro=document.getElementById('fRound').value;
+  filtRows=allRows.filter(function(r){
+    return(co==='all'||r.county===co)&&(si==='all'||r.site===si)&&(ty==='all'||r.typology===ty)&&(ro==='all'||r.round===ro);
+  });
   renderAll();
 }
 function renderAll(){renderKPIs();renderTrend();renderBarriers();renderHeat();renderActions();document.getElementById('panels').style.display='grid';}
+
 function renderKPIs(){
-  const rows=filtRows.length?filtRows:allRows;
-  document.getElementById('kpiRow').innerHTML=VAR_MAP.map(vm=>{
-    const v=pct(rows,vm.var),t=vm.target,d=v-t;
-    return`<div class="kpi ${cc(v,t)}"><div class="kpi-lbl">Q${vm.q} &middot; ${vm.label}</div><div class="kpi-val">${v}%</div><div class="kpi-tgt ${tc(v,t)}">Target &ge;${t}% &nbsp;${v>=t?'&check; met':d+'% gap'}</div></div>`;
+  var rows=filtRows.length?filtRows:allRows;
+  document.getElementById('kpiRow').innerHTML=VAR_MAP.map(function(vm){
+    var val=pct(rows,vm.v),t=vm.t,d=val-t;
+    return'<div class="kpi '+cc(val,t)+'"><div class="kpi-lbl">Q'+vm.q+' · '+vm.label+'</div><div class="kpi-val">'+val+'%</div><div class="kpi-tgt '+tc(val,t)+'">Target ≥'+t+'%  '+(val>=t?'✓ met':d+'% gap')+'</div></div>';
   }).join('');
 }
 function renderTrend(){
-  const rnds=['R1','R2','R3','R4','R5'];
-  const series=[{var:'condom_lastsex',color:'#c084fc',dash:[]},{var:'hiv_test',color:'#e879f9',dash:[4,3]},{var:'prep_current',color:'#f0abfc',dash:[2,3]}];
-  const ds=series.map(s=>{return{data:rnds.map(r=>{const rr=allRows.filter(x=>x.round===r);return rr.length?pct(rr,s.var):null;}),borderColor:s.color,pointBackgroundColor:s.color,borderDash:s.dash,tension:.35,borderWidth:2,pointRadius:4,spanGaps:true}});
-  ds.push({data:rnds.map(()=>80),borderColor:'rgba(255,255,255,0.2)',borderDash:[5,4],borderWidth:1,pointRadius:0});
+  var rnds=['R1','R2','R3','R4','R5'];
+  var series=[{fld:'condom_lastsex',color:'#c084fc',dash:[]},{fld:'hiv_test',color:'#e879f9',dash:[4,3]},{fld:'prep_current',color:'#f0abfc',dash:[2,3]}];
+  var ds=series.map(function(s){
+    return{data:rnds.map(function(r){var rr=allRows.filter(function(x){return x.round===r;});return rr.length?pct(rr,s.fld):null;}),
+      borderColor:s.color,pointBackgroundColor:s.color,borderDash:s.dash,tension:.35,borderWidth:2,pointRadius:4,spanGaps:true};
+  });
+  ds.push({data:rnds.map(function(){return 80;}),borderColor:'rgba(255,255,255,0.2)',borderDash:[5,4],borderWidth:1,pointRadius:0});
   if(tChart)tChart.destroy();
-  tChart=new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:rnds,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(180,140,255,0.1)'},ticks:{color:'#a78bca',font:{size:9}}},y:{min:0,max:100,grid:{color:'rgba(180,140,255,0.1)'},ticks:{color:'#a78bca',font:{size:9},callback:v=>v+'%'}}}}});
+  tChart=new Chart(document.getElementById('trendChart'),{
+    type:'line',data:{labels:rnds,datasets:ds},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:'rgba(180,140,255,0.1)'},ticks:{color:'#a78bca',font:{size:9}}},
+              y:{min:0,max:100,grid:{color:'rgba(180,140,255,0.1)'},ticks:{color:'#a78bca',font:{size:9},callback:function(v){return v+'%';}}}}}});
 }
 function renderBarriers(){
-  const rows=filtRows.length?filtRows:allRows;
-  const vals=BARRIERS.map(b=>pct(rows,b.var)),mx=Math.max(...vals,1);
-  document.getElementById('barrierList').innerHTML=BARRIERS.map((b,i)=>`<div class="brow"><span class="blbl">${b.label}</span><div class="bbg"><div class="bfill" style="width:${Math.round(vals[i]/mx*100)}%;background:${b.color}"></div></div><span class="bpct">${vals[i]}%</span></div>`).join('');
+  var rows=filtRows.length?filtRows:allRows;
+  var vals=BARRIERS.map(function(b){return pct(rows,b.v);});
+  var mx=Math.max.apply(null,vals.concat([1]));
+  document.getElementById('barrierList').innerHTML=BARRIERS.map(function(b,i){
+    return'<div class="brow"><span class="blbl">'+b.label+'</span><div class="bbg"><div class="bfill" style="width:'+Math.round(vals[i]/mx*100)+'%;background:'+b.color+'"></div></div><span class="bpct">'+vals[i]+'%</span></div>';
+  }).join('');
 }
 function renderHeat(){
-  const hv=[{v:'condom_lastsex',t:80},{v:'hiv_test',t:60},{v:'prep_current',t:50},{v:'art_enrolled',t:90},{v:'satisfied',t:75}];
-  const sites=[...new Set(allRows.map(r=>r.site))].slice(0,8);
-  document.getElementById('heatBody').innerHTML=sites.map(s=>{
-    const rr=allRows.filter(r=>r.site===s),co=rr[0]?.county||'';
-    return`<tr><td>${s}</td><td>${co}</td>${hv.map(({v,t})=>{const val=pct(rr,v);return`<td><span class="hc ${hc(val,t)}">${val}%</span></td>`;}).join('')}</tr>`;
+  var hv=[{v:'condom_lastsex',t:80},{v:'hiv_test',t:60},{v:'prep_current',t:50},{v:'art_enrolled',t:90},{v:'satisfied',t:75}];
+  var sites=[...new Set(allRows.map(function(r){return r.site;}))].slice(0,8);
+  document.getElementById('heatBody').innerHTML=sites.map(function(s){
+    var rr=allRows.filter(function(r){return r.site===s;}),co=rr[0]?rr[0].county:'';
+    return'<tr><td>'+s+'</td><td>'+co+'</td>'+hv.map(function(x){var val=pct(rr,x.v);return'<td><span class="hc '+hc(val,x.t)+'">'+val+'%</span></td>';}).join('')+'</tr>';
   }).join('');
 }
 function renderActions(){
-  const sc={Done:'pd','In Progress':'pp',Overdue:'po'};
-  document.getElementById('actionBody').innerHTML=actRows.length?actRows.map(a=>`<tr>
-    <td>${a['Site Name']||a.site||''}</td><td>${a['County']||a.county||''}</td>
-    <td>${a['Action Item']||a.action||''}</td><td>${a['Lead']||a.lead||''}</td>
-    <td>${a['Deadline']||a.deadline||''}</td>
-    <td><span class="pill ${sc[a['Status']||a.status]||'pp'}">${a['Status']||a.status||'Pending'}</span></td>
-  </tr>`).join(''):'<tr><td colspan="6" style="color:#a78bca;padding:10px">No action plans found</td></tr>';
-}
-function showErr(){
-  document.getElementById('statusDot').className='dot off';
-  document.getElementById('kpiRow').innerHTML=`<div class="err-box">
-    <b>Cannot connect to Google Sheets</b><br><br>
-    Fix in Apps Script:<br>
-    1. Open Google Sheet &rarr; <b>Extensions &rarr; Apps Script</b><br>
-    2. Click <b>Deploy &rarr; Manage deployments &rarr; pencil icon</b><br>
-    3. Set <b>Who has access</b> to <b>Anyone</b><br>
-    4. Replace Code.gs with correct version &rarr; New version &rarr; Deploy<br>
-    5. Click <b>&#8635; Refresh</b> above
-  </div>`;
-}
-function downloadPDF(){
-  const btn=document.getElementById('pdfBtn');
-  btn.classList.add('loading');
-  btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generating...';
-  const {jsPDF}=window.jspdf;
-  html2canvas(document.body,{scale:1.5,useCORS:true,allowTaint:true,backgroundColor:'#1a0a2e',logging:false,windowWidth:1280}).then(canvas=>{
-    const imgData=canvas.toDataURL('image/jpeg',0.92);
-    const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'a3'});
-    const pdfW=pdf.internal.pageSize.getWidth(),pdfH=pdf.internal.pageSize.getHeight();
-    const imgH=pdfW*(canvas.height/canvas.width);
-    if(imgH<=pdfH){pdf.addImage(imgData,'JPEG',0,0,pdfW,imgH);}
-    else{
-      let yOff=0;const pageCanvasH=canvas.width*(pdfH/pdfW);let pg=0;
-      while(yOff<canvas.height){
-        const pc=document.createElement('canvas');pc.width=canvas.width;pc.height=Math.min(pageCanvasH,canvas.height-yOff);
-        pc.getContext('2d').drawImage(canvas,0,-yOff);
-        const pd=pc.toDataURL('image/jpeg',0.92);
-        if(pg>0)pdf.addPage();
-        pdf.addImage(pd,'JPEG',0,0,pdfW,pdfW*(pc.height/canvas.width));
-        yOff+=pageCanvasH;pg++;
-      }
-    }
-    pdf.setProperties({title:'ePBS Dashboard — NASCOP/KRCS',author:'NASCOP / Kenya Red Cross Society'});
-    const date=new Date().toISOString().slice(0,10);
-    pdf.save(`ePBS_Dashboard_${date}.pdf`);
-    btn.classList.remove('loading');
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF';
-  }).catch(()=>{
-    btn.classList.remove('loading');
-    btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF';
-    alert('PDF failed. Use browser Print → Save as PDF instead.');
-  });
+  var sc={Done:'pd','In Progress':'pp',Overdue:'po'};
+  document.getElementById('actionBody').innerHTML=actRows.length?actRows.map(function(a){
+    var st=a['Status']||a.status||'Pending';
+    return'<tr><td>'+(a['Site Name']||a.site||'')+'</td><td>'+(a['County']||a.county||'')+'</td><td>'+(a['Action Item']||a.action||'')+'</td><td>'+(a['Lead']||a.lead||'')+'</td><td>'+(a['Deadline']||a.deadline||'')+'</td><td><span class="pill '+(sc[st]||'pp')+'">'+st+'</span></td></tr>';
+  }).join(''):'<tr><td colspan="6" style="color:#a78bca;padding:10px">No action plans found</td></tr>';
 }
 function loadData(){
   document.getElementById('statusDot').className='dot off';
-  document.getElementById('bannerText').textContent='Connecting to Google Sheets…';
-  const old=document.getElementById('_gs');if(old)old.remove();
-  window._cb=function(json){
-    allRows=norm(json.data||[]);actRows=json.actions||[];
-    document.getElementById('statusDot').className='dot';
-    document.getElementById('bannerText').innerHTML='<b>'+allRows.length+'</b> records from Google Sheets &nbsp;&middot;&nbsp; Last sync: <b>'+new Date().toLocaleTimeString()+'</b>';
-    popFilters();applyFilters();
-  };
-  const s=document.createElement('script');s.id='_gs';
-  s.src=APPS_URL+'?format=json&callback=_cb';
-  s.onerror=showErr;
-  document.head.appendChild(s);
-  setTimeout(function(){if(!allRows.length)showErr();},9000);
+  document.getElementById('bannerText').textContent='Loading from Google Sheets…';
+  Papa.parse(csvUrl(AGG_GID),{
+    download:true,header:true,skipEmptyLines:true,
+    complete:function(res){
+      allRows=norm(res.data);
+      document.getElementById('statusDot').className='dot';
+      document.getElementById('bannerText').innerHTML='<b>'+allRows.length+'</b> records from Google Sheets &nbsp;·&nbsp; Last sync: <b>'+new Date().toLocaleTimeString()+'</b>';
+      popFilters();applyFilters();
+      Papa.parse(csvUrl(ACT_GID),{download:true,header:true,skipEmptyLines:true,complete:function(r2){actRows=r2.data;renderActions();},error:function(){}});
+    },
+    error:function(err){
+      document.getElementById('statusDot').className='dot off';
+      document.getElementById('bannerText').innerHTML='Error: '+JSON.stringify(err);
+      document.getElementById('kpiRow').innerHTML='<div class="err-box"><b>Cannot load sheet</b><br>Make sure sheet is public (Anyone with link can view).</div>';
+    }
+  });
+}
+function downloadPDF(){
+  var btn=document.getElementById('pdfBtn');btn.textContent='Generating…';
+  var P=window.jspdf;
+  html2canvas(document.body,{scale:1.5,useCORS:true,backgroundColor:'#1a0a2e'}).then(function(canvas){
+    var img=canvas.toDataURL('image/jpeg',.92);
+    var pdf=new P.jsPDF({orientation:'landscape',unit:'mm',format:'a3'});
+    var w=pdf.internal.pageSize.getWidth();
+    pdf.addImage(img,'JPEG',0,0,w,w*(canvas.height/canvas.width));
+    pdf.save('ePBS_Dashboard_'+new Date().toISOString().slice(0,10)+'.pdf');
+    btn.textContent='Download PDF';
+  });
 }
 loadData();
 </script>
