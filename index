@@ -7,118 +7,76 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root{
-  --bg:#0a0f1e;--surface:#111827;--surface2:#1a2235;--border:rgba(255,255,255,0.07);
-  --accent:#00d4aa;--accent2:#4f9cf9;--text:#e2e8f0;--muted:#64748b;
-  --danger:#ef4444;--success:#22c55e;--warn:#f59e0b;
-  --font:"DM Sans",sans-serif;--mono:"DM Mono",monospace
-}
+:root{--bg:#0a0f1e;--surface:#111827;--surface2:#1a2235;--border:rgba(255,255,255,0.07);--accent:#00d4aa;--accent2:#4f9cf9;--text:#e2e8f0;--muted:#64748b;--danger:#ef4444;--success:#22c55e;--warn:#f59e0b;--font:"DM Sans",sans-serif;--mono:"DM Mono",monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px}
 .header{background:#fff;border-bottom:3px solid #006633}
-.logo-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 28px;gap:16px}
+.logo-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 20px;gap:12px}
 .logo-slot{display:flex;align-items:center}
 .logo-slot.left{justify-content:flex-start}
 .logo-slot.center{justify-content:center}
 .logo-slot.right{justify-content:flex-end}
-.logo-box{display:flex;flex-direction:column;align-items:center;gap:5px}
-.logo-img{height:68px;width:auto;object-fit:contain}
-.logo-img.large{height:80px}
-.logo-name{font-size:11px;font-weight:700;color:#1a3c5e;letter-spacing:.04em;text-align:center;font-family:"DM Sans",sans-serif}
-.logo-full{font-size:9px;color:#64748b;text-align:center;max-width:130px;line-height:1.4;font-family:"DM Sans",sans-serif}
-.title-bar{background:#006633;text-align:center;padding:10px 24px 12px}
-.title-bar h1{font-size:15px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase;font-family:"DM Sans",sans-serif}
-.title-bar p{font-size:11px;color:rgba(255,255,255,.75);margin-top:4px;font-family:"DM Sans",sans-serif}
-
-/* ── CONFIG MODAL ── */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center}
-.modal-bg.hidden{display:none}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;width:480px;max-width:90vw}
-.modal h2{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px}
-.modal p{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.6}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
-.field input{width:100%;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-family:var(--mono);font-size:12px}
-.field input:focus{outline:none;border-color:var(--accent)}
-.field-hint{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5}
-.modal-btns{display:flex;gap:10px;margin-top:20px}
-.btn-primary{background:var(--accent);color:#000;border:none;border-radius:6px;padding:8px 20px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;flex:1}
-.btn-primary:hover{opacity:.85}
-.btn-secondary{background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:8px 16px;font-family:var(--font);font-size:12px;cursor:pointer}
-.btn-secondary:hover{border-color:var(--muted)}
-.conn-status{font-size:11px;margin-top:10px;padding:7px 10px;border-radius:6px;display:none}
-.conn-ok{background:rgba(34,197,94,.15);color:#86efac;display:block}
-.conn-err{background:rgba(239,68,68,.15);color:#fca5a5;display:block}
-
-/* ── FILTER BAR ── */
-.filterbar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--border)}
-select{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-family:var(--font);font-size:11px;cursor:pointer}
-select:focus{outline:none;border-color:var(--accent)}
-.refresh{background:var(--accent);color:#000;border:none;border-radius:6px;padding:5px 14px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer}
+.logo-box{display:flex;flex-direction:column;align-items:center;gap:4px}
+.logo-img{height:62px;width:auto;object-fit:contain}
+.logo-img.lg{height:74px}
+.logo-name{font-size:10px;font-weight:700;color:#1a3c5e;letter-spacing:.04em;text-align:center}
+.logo-full{font-size:9px;color:#64748b;text-align:center;max-width:120px;line-height:1.3}
+.title-bar{background:#006633;text-align:center;padding:9px 20px 11px}
+.title-bar h1{font-size:14px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase}
+.title-bar p{font-size:10px;color:rgba(255,255,255,.75);margin-top:3px}
+.filterbar{display:flex;gap:6px;flex-wrap:wrap;padding:9px 20px;background:var(--surface);border-bottom:1px solid var(--border)}
+select{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:5px 9px;font-family:var(--font);font-size:11px;cursor:pointer}
+.refresh{margin-left:auto;background:var(--accent);color:#000;border:none;border-radius:6px;padding:5px 13px;font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer}
 .refresh:hover{opacity:.85}
-.settings-btn{background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-family:var(--font);font-size:11px;cursor:pointer;margin-left:auto}
-.settings-btn:hover{border-color:var(--accent);color:var(--accent)}
-
-/* ── MAIN ── */
-.main{padding:18px 24px;display:flex;flex-direction:column;gap:14px}
-.banner{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:9px 14px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.main{padding:14px 20px;display:flex;flex-direction:column;gap:12px}
+.banner{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:7px;padding:8px 12px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .banner b{color:var(--text)}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--success);animation:pulse 2s infinite;flex-shrink:0}
 .dot.grey{background:var(--muted);animation:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;border-bottom:3px solid transparent}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px 14px;border-bottom:3px solid transparent}
 .kpi.g{border-bottom-color:var(--success)}.kpi.a{border-bottom-color:var(--warn)}.kpi.r{border-bottom-color:var(--danger)}
-.kpi-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
-.kpi-val{font-size:26px;font-weight:600;font-family:var(--mono);line-height:1}
-.kpi-tgt{font-size:10px;margin-top:5px}
+.kpi-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.kpi-val{font-size:24px;font-weight:600;font-family:var(--mono);line-height:1}
+.kpi-tgt{font-size:9px;margin-top:4px}
 .kpi-tgt.met{color:var(--success)}.kpi-tgt.near{color:var(--warn)}.kpi-tgt.miss{color:var(--danger)}
-.panels{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px}
 .full{grid-column:1/-1}
-@media(max-width:680px){.panels{grid-template-columns:1fr}}
-.ptitle{font-size:12px;font-weight:600;margin-bottom:3px}
-.psub{font-size:10px;color:var(--muted);margin-bottom:12px}
-.phead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
-.badge{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;background:rgba(0,212,170,.15);color:var(--accent)}
-.badge-grey{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;background:rgba(100,116,139,.15);color:var(--muted)}
-.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-.li{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
-.lsq{width:9px;height:9px;border-radius:2px}
-.bars{display:flex;flex-direction:column;gap:7px}
-.brow{display:flex;align-items:center;gap:8px}
-.blbl{font-size:11px;min-width:150px;flex-shrink:0}
-.bbg{flex:1;height:8px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden}
-.bfill{height:100%;border-radius:4px}
-.bpct{font-size:11px;font-family:var(--mono);color:var(--muted);min-width:32px;text-align:right}
-.ht{width:100%;border-collapse:collapse;font-size:11px}
-.ht th{padding:5px 9px;text-align:left;color:var(--muted);font-size:10px;font-weight:500;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.03)}
-.ht td{padding:5px 9px;border-bottom:1px solid rgba(255,255,255,0.03)}
+@media(max-width:600px){.panels{grid-template-columns:1fr}}
+.ptitle{font-size:11px;font-weight:600;margin-bottom:2px}
+.psub{font-size:10px;color:var(--muted);margin-bottom:10px}
+.phead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.badge{font-size:9px;padding:2px 7px;border-radius:3px;font-weight:600;background:rgba(0,212,170,.15);color:var(--accent)}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+.li{display:flex;align-items:center;gap:3px;font-size:9px;color:var(--muted)}
+.lsq{width:8px;height:8px;border-radius:2px}
+.bars{display:flex;flex-direction:column;gap:6px}
+.brow{display:flex;align-items:center;gap:6px}
+.blbl{font-size:10px;min-width:130px;flex-shrink:0}
+.bbg{flex:1;height:7px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden}
+.bfill{height:100%;border-radius:3px}
+.bpct{font-size:10px;font-family:var(--mono);color:var(--muted);min-width:28px;text-align:right}
+.ht{width:100%;border-collapse:collapse;font-size:10px}
+.ht th{padding:4px 8px;text-align:left;color:var(--muted);font-size:9px;font-weight:500;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.03)}
+.ht td{padding:4px 8px;border-bottom:1px solid rgba(255,255,255,0.03)}
 .ht tr:last-child td{border-bottom:none}
-.hc{display:inline-block;padding:1px 8px;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:500}
-.hg{background:rgba(34,197,94,.15);color:#86efac}
-.ha{background:rgba(245,158,11,.15);color:#fcd34d}
-.hr{background:rgba(239,68,68,.15);color:#fca5a5}
-.at{width:100%;border-collapse:collapse;font-size:11px}
-.at th{padding:6px 9px;text-align:left;font-size:10px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.03)}
-.at td{padding:6px 9px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.hc{display:inline-block;padding:1px 6px;border-radius:3px;font-family:var(--mono);font-size:9px;font-weight:500}
+.hg{background:rgba(34,197,94,.15);color:#86efac}.ha{background:rgba(245,158,11,.15);color:#fcd34d}.hr{background:rgba(239,68,68,.15);color:#fca5a5}
+.at{width:100%;border-collapse:collapse;font-size:10px}
+.at th{padding:5px 8px;text-align:left;font-size:9px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.03)}
+.at td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,0.04)}
 .at tr:last-child td{border-bottom:none}
-.pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
-.pd{background:rgba(34,197,94,.15);color:#86efac}
-.pp{background:rgba(245,158,11,.15);color:#fcd34d}
-.po{background:rgba(239,68,68,.15);color:#fca5a5}
-.varmap{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px}
-.varmap-title{font-size:12px;font-weight:600;color:var(--accent);margin-bottom:10px}
-.vm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px}
-.vm-row{display:flex;align-items:baseline;gap:6px;font-size:11px;padding:4px 8px;background:var(--surface);border-radius:5px;border:1px solid var(--border)}
-.vm-q{color:var(--muted);min-width:24px;font-family:var(--mono)}
-.vm-var{color:var(--accent2);font-family:var(--mono);font-size:10px}
-.vm-val{margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:600}
+.pill{display:inline-block;font-size:9px;padding:2px 7px;border-radius:8px;font-weight:600}
+.pd{background:rgba(34,197,94,.15);color:#86efac}.pp{background:rgba(245,158,11,.15);color:#fcd34d}.po{background:rgba(239,68,68,.15);color:#fca5a5}
+.spinner-wrap{text-align:center;padding:40px;color:var(--muted);font-size:12px}
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
-<!-- ═══ HEADER ═══ -->
 <div class="header">
   <div class="logo-bar">
     <div class="logo-slot left">
@@ -130,7 +88,7 @@ select:focus{outline:none;border-color:var(--accent)}
     </div>
     <div class="logo-slot center">
       <div class="logo-box">
-        <img class="logo-img large" src="data:image/png;base64,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" alt="Ministry of Health">
+        <img class="logo-img lg" src="data:image/png;base64,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" alt="Ministry of Health">
         <div class="logo-name">Ministry of Health</div>
         <div class="logo-full">Republic of Kenya</div>
       </div>
@@ -149,38 +107,6 @@ select:focus{outline:none;border-color:var(--accent)}
   </div>
 </div>
 
-<!-- ═══ GOOGLE SHEETS CONFIG MODAL ═══ -->
-<div class="modal-bg" id="configModal">
-  <div class="modal">
-    <h2>Connect Google Sheets</h2>
-    <p>Paste your Google Sheet ID and API Key below. The dashboard will pull live data from your Aggregator and ActionPlans tabs every time you refresh.</p>
-    <div class="field">
-      <label>Google Sheet ID</label>
-      <input id="inputSheetId" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms" />
-      <div class="field-hint">Found in your Sheet URL: docs.google.com/spreadsheets/d/<b>SHEET_ID</b>/edit</div>
-    </div>
-    <div class="field">
-      <label>Google API Key</label>
-      <input id="inputApiKey" placeholder="AIzaSy..." />
-      <div class="field-hint">From Google Cloud Console &rarr; APIs &amp; Services &rarr; Credentials</div>
-    </div>
-    <div class="field">
-      <label>Responses tab name</label>
-      <input id="inputAggTab" value="Aggregator (Dashboard Feed)" />
-    </div>
-    <div class="field">
-      <label>Action plans tab name</label>
-      <input id="inputActTab" value="ActionPlans" />
-    </div>
-    <div id="connStatus" class="conn-status"></div>
-    <div class="modal-btns">
-      <button class="btn-primary" onclick="connectSheets()">Connect &amp; load data</button>
-      <button class="btn-secondary" onclick="useSample()">Use sample data</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ FILTER BAR ═══ -->
 <div class="filterbar">
   <select id="fCounty" onchange="applyFilters()"><option value="all">All Counties</option></select>
   <select id="fSite"   onchange="applyFilters()"><option value="all">All Sites</option></select>
@@ -189,257 +115,101 @@ select:focus{outline:none;border-color:var(--accent)}
     <option>FSW</option><option>MSM</option><option>TG</option>
     <option>PWID</option><option>AGYW</option><option>LDT</option><option>Fisherfolk</option>
   </select>
-  <select id="fRound"  onchange="applyFilters()">
+  <select id="fRound" onchange="applyFilters()">
     <option value="all">All Rounds</option>
     <option>R1</option><option>R2</option><option>R3</option><option>R4</option><option>R5</option>
   </select>
   <button class="refresh" onclick="loadData()">&#8635; Refresh</button>
-  <button class="settings-btn" onclick="openConfig()">&#9881; Google Sheets</button>
 </div>
 
-<!-- ═══ MAIN ═══ -->
 <div class="main">
   <div class="banner">
-    <div class="dot" id="statusDot"></div>
-    <span id="bannerText"><b>0</b> records &mdash; click <b>Google Sheets</b> to connect live data</span>
+    <div class="dot grey" id="statusDot"></div>
+    <span id="bannerText">Connecting to Google Sheets...</span>
   </div>
 
-  <div class="kpis" id="kpiRow"></div>
+  <div class="kpis" id="kpiRow">
+    <div class="spinner-wrap"><div class="spinner"></div>Loading live data...</div>
+  </div>
 
-  <div class="panels">
+  <div class="panels" id="panels" style="display:none">
     <div class="panel">
       <div class="phead">
         <div><div class="ptitle">Indicator trend by round</div><div class="psub">% YES across all sessions</div></div>
-        <span class="badge" id="trendBadge">Sample</span>
+        <span class="badge">Live</span>
       </div>
       <div class="legend">
-        <span class="li"><span class="lsq" style="background:#00d4aa"></span>Condom (Q4)</span>
-        <span class="li"><span class="lsq" style="background:#4f9cf9"></span>HIV test (Q13)</span>
-        <span class="li"><span class="lsq" style="background:#f97316"></span>PrEP (Q21)</span>
-        <span class="li"><span class="lsq" style="background:rgba(255,255,255,0.2)"></span>Target 80%</span>
+        <span class="li"><span class="lsq" style="background:#00d4aa"></span>Condom</span>
+        <span class="li"><span class="lsq" style="background:#4f9cf9"></span>HIV test</span>
+        <span class="li"><span class="lsq" style="background:#f97316"></span>PrEP</span>
       </div>
-      <div style="position:relative;height:190px">
-        <canvas id="trendChart" role="img" aria-label="Indicator trend lines by round">Trend data.</canvas>
-      </div>
+      <div style="position:relative;height:170px"><canvas id="trendChart" role="img" aria-label="Trend chart">Trend data.</canvas></div>
     </div>
-
     <div class="panel">
-      <div class="phead"><div><div class="ptitle">Barriers reported</div><div class="psub">% YES from tally questions</div></div></div>
+      <div class="phead"><div><div class="ptitle">Barriers reported</div><div class="psub">% YES from tally</div></div></div>
       <div class="bars" id="barrierList"></div>
     </div>
-
     <div class="panel full">
-      <div class="ptitle" style="margin-bottom:3px">Cross-site heat map</div>
-      <div class="psub">Key indicators &mdash; latest round &nbsp;&middot;&nbsp; Green &ge; target &middot; Amber within 10% &middot; Red below</div>
-      <div style="overflow-x:auto">
-        <table class="ht">
-          <thead><tr><th>Site</th><th>County</th><th>Condom</th><th>HIV test</th><th>PrEP</th><th>ART</th><th>Satisfied</th></tr></thead>
-          <tbody id="heatBody"></tbody>
-        </table>
-      </div>
+      <div class="ptitle" style="margin-bottom:2px">Cross-site heat map</div>
+      <div class="psub">Key indicators &mdash; all sites</div>
+      <div style="overflow-x:auto"><table class="ht"><thead><tr><th>Site</th><th>County</th><th>Condom</th><th>HIV test</th><th>PrEP</th><th>ART</th><th>Satisfied</th></tr></thead><tbody id="heatBody"></tbody></table></div>
     </div>
-
     <div class="panel full">
-      <div class="ptitle" style="margin-bottom:3px">Action plan tracker</div>
-      <div class="psub">From ActionPlans sheet</div>
-      <table class="at">
-        <thead><tr><th>Site</th><th>County</th><th>Action</th><th>Lead</th><th>Deadline</th><th>Status</th></tr></thead>
-        <tbody id="actionBody"></tbody>
-      </table>
+      <div class="ptitle" style="margin-bottom:2px">Action plan tracker</div>
+      <div class="psub">Site-level actions</div>
+      <table class="at"><thead><tr><th>Site</th><th>County</th><th>Action</th><th>Lead</th><th>Deadline</th><th>Status</th></tr></thead><tbody id="actionBody"></tbody></table>
     </div>
-  </div>
-
-  <div class="varmap">
-    <div class="varmap-title">Tally Form &rarr; Dashboard Variable Map</div>
-    <div class="vm-grid" id="varGrid"></div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-//  GOOGLE SHEETS CONFIG — saved in localStorage
-// ═══════════════════════════════════════════════════════
-let CFG = {
-  sheetId: '',
-  apiKey:  '',
-  aggTab:  'Aggregator (Dashboard Feed)',
-  actTab:  'ActionPlans',
-};
+// ═══════════════════════════════════════════════
+//  YOUR APPS SCRIPT URL — data comes from here
+// ═══════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfWEOPpMbt7qbY8YkYTwSiUaPVTR9lj1acWfHEQbkK4ltmoPX9_OSZtzwGkdjVi0ofog/exec';
 
-function saveConfig() {
-  try { localStorage.setItem('epbs_cfg', JSON.stringify(CFG)); } catch(e) {}
-}
-function loadConfig() {
-  try {
-    const s = localStorage.getItem('epbs_cfg');
-    if (s) CFG = {...CFG, ...JSON.parse(s)};
-  } catch(e) {}
-}
+const VAR_MAP=[
+  {q:4, var:'condom_lastsex', label:'Condom use last sex',    target:80},
+  {q:13,var:'hiv_test',       label:'HIV test last 3 months', target:60},
+  {q:21,var:'prep_current',   label:'Currently on PrEP',      target:50},
+  {q:16,var:'art_enrolled',   label:'ART enrolled (PLHIV)',   target:90},
+  {q:33,var:'satisfied',      label:'Satisfied w/ services',  target:75},
+  {q:34,var:'respect',        label:'Staff respectful',       target:80},
+];
+const BARRIER_VARS=[
+  {var:'stigma',         label:'Stigma at facility',   color:'#ef4444'},
+  {var:'police_violence',label:'Police violence',       color:'#f97316'},
+  {var:'peer_edu',       label:'Peer educator reached', color:'#22c55e'},
+  {var:'services',       label:'Services accessed',     color:'#4f9cf9'},
+];
 
-function openConfig() {
-  loadConfig();
-  document.getElementById('inputSheetId').value = CFG.sheetId;
-  document.getElementById('inputApiKey').value  = CFG.apiKey;
-  document.getElementById('inputAggTab').value  = CFG.aggTab;
-  document.getElementById('inputActTab').value  = CFG.actTab;
-  document.getElementById('connStatus').className = 'conn-status';
-  document.getElementById('connStatus').textContent = '';
-  document.getElementById('configModal').classList.remove('hidden');
+function toNum(v){
+  if(!v&&v!==0)return 0;
+  const s=String(v).trim();
+  if(s.endsWith('%'))return parseFloat(s)/100;
+  const n=parseFloat(s);
+  return isNaN(n)?0:n>1?n/100:n;
 }
 
-function closeConfig() {
-  document.getElementById('configModal').classList.add('hidden');
-}
-
-// ═══════════════════════════════════════════════════════
-//  GOOGLE SHEETS FETCH
-// ═══════════════════════════════════════════════════════
-async function fetchTab(tab) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${CFG.sheetId}/values/${encodeURIComponent(tab)}?key=${CFG.apiKey}`;
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`HTTP ${r.status} — check Sheet ID, API key, and that the sheet is public (Viewer access).`);
-  const json = await r.json();
-  if (!json.values || json.values.length < 2) throw new Error('Sheet is empty or tab name is wrong.');
-  const [headers, ...rows] = json.values;
-  return rows.map(row => {
-    const obj = {};
-    headers.forEach((h, i) => obj[h.trim()] = (row[i] || '').toString().trim());
-    return obj;
-  });
-}
-
-function normaliseAgg(rows) {
-  return rows.map(r => ({
-    county:        r['County']    || r['county']    || '',
-    site:          r['Site']      || r['site']      || r['Site Name'] || '',
-    typology:      r['Typology']  || r['typology']  || '',
-    round:         r['Round']     || r['round']     || '',
-    peer_edu:      parseFloat(r['peer_edu']        || r['Peer Educator']||0),
-    rights_info:   parseFloat(r['rights_info']     || 0),
-    prevention:    parseFloat(r['prevention']      || 0),
-    condom_lastsex:parseFloat(r['condom_lastsex']  || r['Condom_LastSex'] || 0),
-    services:      parseFloat(r['services']        || 0),
-    hiv_test:      parseFloat(r['hiv_test']        || r['TestedHIV_Last3Mo'] || 0),
-    art_enrolled:  parseFloat(r['art_enrolled']    || r['Enrolled_ART'] || 0),
-    arv_taking:    parseFloat(r['arv_taking']      || 0),
-    viral_supp:    parseFloat(r['viral_supp']      || 0),
-    prep_3mo:      parseFloat(r['prep_3mo']        || 0),
-    prep_current:  parseFloat(r['prep_current']    || r['CurrentlyOnPrEP'] || 0),
-    sti_treated:   parseFloat(r['sti_treated']     || 0),
-    police_violence:parseFloat(r['police_violence']|| 0),
-    stigma:        parseFloat(r['stigma']          || r['Barrier_Stigma'] || 0),
-    satisfied:     parseFloat(r['satisfied']       || r['Satisfied_Service'] || 0),
-    respect:       parseFloat(r['respect']         || 0),
+function normalise(rows){
+  return rows.map(r=>({
+    county:r['County']||r['county']||'',
+    site:r['Site']||r['site']||r['Site Name']||'',
+    typology:r['Typology']||r['typology']||'',
+    round:r['Round']||r['round']||'',
+    peer_edu:toNum(r['peer_edu']),rights_info:toNum(r['rights_info']),
+    prevention:toNum(r['prevention']),condom_lastsex:toNum(r['condom_lastsex']),
+    services:toNum(r['services']),hiv_test:toNum(r['hiv_test']),
+    art_enrolled:toNum(r['art_enrolled']),arv_taking:toNum(r['arv_taking']),
+    viral_supp:toNum(r['viral_supp']),prep_3mo:toNum(r['prep_3mo']),
+    prep_current:toNum(r['prep_current']),sti_treated:toNum(r['sti_treated']),
+    police_violence:toNum(r['police_violence']),stigma:toNum(r['stigma']),
+    satisfied:toNum(r['satisfied']),respect:toNum(r['respect']),
   }));
 }
 
-async function connectSheets() {
-  CFG.sheetId = document.getElementById('inputSheetId').value.trim();
-  CFG.apiKey  = document.getElementById('inputApiKey').value.trim();
-  CFG.aggTab  = document.getElementById('inputAggTab').value.trim();
-  CFG.actTab  = document.getElementById('inputActTab').value.trim();
-
-  const status = document.getElementById('connStatus');
-  status.className = 'conn-status';
-  status.textContent = 'Connecting...';
-
-  if (!CFG.sheetId || !CFG.apiKey) {
-    status.className = 'conn-status conn-err';
-    status.textContent = 'Please enter both Sheet ID and API Key.';
-    return;
-  }
-
-  try {
-    const [aggRows, actRows] = await Promise.all([
-      fetchTab(CFG.aggTab),
-      fetchTab(CFG.actTab).catch(() => []),
-    ]);
-    allRows    = normaliseAgg(aggRows);
-    actionRows = actRows;
-    saveConfig();
-    status.className = 'conn-status conn-ok';
-    status.textContent = `Connected! ${allRows.length} records loaded from Google Sheets.`;
-    document.getElementById('trendBadge').textContent = 'Live';
-    document.getElementById('trendBadge').className = 'badge';
-    document.getElementById('statusDot').className = 'dot';
-    document.getElementById('bannerText').innerHTML =
-      `<b>${allRows.length}</b> records from Google Sheets &nbsp;&middot;&nbsp; Last sync: <b>${new Date().toLocaleTimeString()}</b>`;
-    saveConfig();
-    setTimeout(closeConfig, 1200);
-    populateFilters();
-    applyFilters();
-  } catch(e) {
-    status.className = 'conn-status conn-err';
-    status.textContent = 'Error: ' + e.message;
-  }
-}
-
-function useSample() {
-  allRows = makeSample();
-  actionRows = SAMPLE_ACTIONS;
-  closeConfig();
-  document.getElementById('trendBadge').textContent = 'Sample';
-  document.getElementById('trendBadge').className = 'badge-grey';
-  document.getElementById('statusDot').className = 'dot grey';
-  document.getElementById('bannerText').innerHTML =
-    `<b>${allRows.length}</b> sample records &mdash; click <b>Google Sheets</b> to connect live data`;
-  populateFilters();
-  applyFilters();
-}
-
-// ═══════════════════════════════════════════════════════
-//  VARIABLE MAP
-// ═══════════════════════════════════════════════════════
-const VAR_MAP = [
-  {q:1, var:'peer_edu',        label:'Peer educator reached',     target:80},
-  {q:2, var:'rights_info',     label:'Rights info received',       target:80},
-  {q:3, var:'prevention',      label:'Prevention method used',     target:80},
-  {q:4, var:'condom_lastsex',  label:'Condom use last sex',        target:80},
-  {q:12,var:'services',        label:'Health services received',   target:80},
-  {q:13,var:'hiv_test',        label:'HIV test last 3 months',     target:60},
-  {q:16,var:'art_enrolled',    label:'ART enrolled (PLHIV)',       target:90},
-  {q:17,var:'arv_taking',      label:'Currently taking ARV',       target:90},
-  {q:19,var:'viral_supp',      label:'Virally suppressed',         target:90},
-  {q:20,var:'prep_3mo',        label:'PrEP taken last 3 months',   target:50},
-  {q:21,var:'prep_current',    label:'Currently on PrEP',          target:50},
-  {q:26,var:'sti_treated',     label:'STI treated',                target:80},
-  {q:28,var:'police_violence', label:'Police violence exp.',       target:null},
-  {q:31,var:'stigma',          label:'Stigma by HCW exp.',         target:null},
-  {q:33,var:'satisfied',       label:'Satisfied with services',    target:75},
-  {q:34,var:'respect',         label:'Staff treated with respect', target:80},
-];
-const KPI_VARS = ['condom_lastsex','hiv_test','prep_current','art_enrolled','satisfied','respect'];
-const BARRIER_VARS = [
-  {var:'stigma',         label:'Stigma at facility',    color:'#ef4444'},
-  {var:'police_violence',label:'Police violence',        color:'#f97316'},
-  {var:'peer_edu',       label:'Peer educator reached',  color:'#22c55e'},
-  {var:'services',       label:'Services accessed',      color:'#4f9cf9'},
-];
-const SAMPLE_ACTIONS = [
-  {site:'Eastleigh DICE',county:'Nairobi',action:'Deploy additional peer educator',lead:'Site Manager',deadline:'2025-06-30',status:'In Progress'},
-  {site:'Kibera DICE',county:'Nairobi',action:'Restock PrEP shortage R4',lead:'County Pharm.',deadline:'2025-06-15',status:'Done'},
-  {site:'Likoni DICE',county:'Mombasa',action:'Staff sensitisation on respectful care',lead:'QI Lead',deadline:'2025-07-01',status:'Overdue'},
-  {site:'Kondele DICE',county:'Kisumu',action:'Evening sessions for PWID',lead:'Outreach Coord.',deadline:'2025-07-15',status:'In Progress'},
-  {site:'Bondeni DICE',county:'Nakuru',action:'Increase HIV testing promotion',lead:'Peer Educator',deadline:'2025-07-10',status:'In Progress'},
-];
-
-function makeSample() {
-  const counties=['Nairobi','Mombasa','Kisumu','Nakuru','Eldoret'];
-  const sites={Nairobi:['Eastleigh DICE','Kibera DICE','CBD Outreach'],Mombasa:['Likoni DICE','Old Town Clinic'],Kisumu:['Kondele DICE','Nyalenda Outreach'],Nakuru:['Bondeni DICE'],Eldoret:['Langas DICE']};
-  const typs=['FSW','MSM','TG','PWID','AGYW'];
-  const rows=[];
-  for(let r=1;r<=5;r++){
-    counties.forEach(co=>{(sites[co]||[]).forEach(si=>{typs.forEach(ty=>{
-      const tr=(r-1)*0.025,row={county:co,site:si,typology:ty,round:'R'+r};
-      VAR_MAP.forEach(v=>{const b=v.target?(v.target/100-0.18+Math.random()*0.32+tr):Math.random()*0.4;row[v.var]=Math.min(1,Math.max(0,parseFloat(b.toFixed(3))));});
-      rows.push(row);
-    });});});
-  }
-  return rows;
-}
-
-let allRows=[], actionRows=SAMPLE_ACTIONS, filteredRows=[], tChart=null;
-const avg=(rows,v)=>rows.length?rows.reduce((s,r)=>s+(parseFloat(r[v])||0),0)/rows.length:0;
+let allRows=[],actionRows=[],filteredRows=[],tChart=null;
+const avg=(rows,v)=>rows.length?rows.reduce((s,r)=>s+(r[v]||0),0)/rows.length:0;
 const pct=(rows,v)=>Math.round(avg(rows,v)*100);
 const cc=(v,t)=>v>=t?'g':v>=t-10?'a':'r';
 const hc=(v,t)=>v>=t?'hg':v>=t-10?'ha':'hr';
@@ -456,13 +226,12 @@ function applyFilters(){
   filteredRows=allRows.filter(r=>(co==='all'||r.county===co)&&(si==='all'||r.site===si)&&(ty==='all'||r.typology===ty)&&(ro==='all'||r.round===ro));
   renderAll();
 }
-function renderAll(){renderKPIs();renderTrend();renderBarriers();renderHeat();renderActions();renderVarMap();}
+function renderAll(){renderKPIs();renderTrend();renderBarriers();renderHeat();renderActions();document.getElementById('panels').style.display='grid';}
 
 function renderKPIs(){
   const rows=filteredRows.length?filteredRows:allRows;
-  document.getElementById('kpiRow').innerHTML=KPI_VARS.map(vn=>{
-    const vm=VAR_MAP.find(v=>v.var===vn);if(!vm)return'';
-    const v=pct(rows,vn),t=vm.target||75,diff=v-t;
+  document.getElementById('kpiRow').innerHTML=VAR_MAP.map(vm=>{
+    const v=pct(rows,vm.var),t=vm.target,diff=v-t;
     return`<div class="kpi ${cc(v,t)}"><div class="kpi-lbl">Q${vm.q} &middot; ${vm.label}</div><div class="kpi-val">${v}%</div><div class="kpi-tgt ${tc(v,t)}">Target &ge;${t}% &nbsp;${v>=t?'&check; met':diff+'% gap'}</div></div>`;
   }).join('');
 }
@@ -472,16 +241,16 @@ function renderTrend(){
   const ds=series.map(s=>({data:rnds.map(r=>{const rr=allRows.filter(x=>x.round===r);return rr.length?pct(rr,s.var):null;}),borderColor:s.color,pointBackgroundColor:s.color,borderDash:s.dash,tension:.35,borderWidth:2,pointRadius:4,spanGaps:true}));
   ds.push({data:rnds.map(()=>80),borderColor:'rgba(255,255,255,0.15)',borderDash:[5,4],borderWidth:1,pointRadius:0});
   if(tChart)tChart.destroy();
-  tChart=new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:rnds,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#64748b',font:{size:10}}},y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#64748b',font:{size:10},callback:v=>v+'%'}}}}});
+  tChart=new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:rnds,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#64748b',font:{size:9}}},y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#64748b',font:{size:9},callback:v=>v+'%'}}}}});
 }
 function renderBarriers(){
-  const rows=filteredRows.length?filteredRows:allRows.filter(r=>r.round==='R5');
+  const rows=filteredRows.length?filteredRows:allRows;
   const vals=BARRIER_VARS.map(b=>pct(rows,b.var)),mx=Math.max(...vals,1);
-  document.getElementById('barrierList').innerHTML=BARRIER_VARS.map((b,i)=>`<div class="brow"><span class="blbl">Q${VAR_MAP.find(v=>v.var===b.var)?.q||''} &middot; ${b.label}</span><div class="bbg"><div class="bfill" style="width:${Math.round(vals[i]/mx*100)}%;background:${b.color}"></div></div><span class="bpct">${vals[i]}%</span></div>`).join('');
+  document.getElementById('barrierList').innerHTML=BARRIER_VARS.map((b,i)=>`<div class="brow"><span class="blbl">${b.label}</span><div class="bbg"><div class="bfill" style="width:${Math.round(vals[i]/mx*100)}%;background:${b.color}"></div></div><span class="bpct">${vals[i]}%</span></div>`).join('');
 }
 function renderHeat(){
   const hv=[{v:'condom_lastsex',t:80},{v:'hiv_test',t:60},{v:'prep_current',t:50},{v:'art_enrolled',t:90},{v:'satisfied',t:75}];
-  const sites=[...new Set(allRows.map(r=>r.site))].slice(0,7);
+  const sites=[...new Set(allRows.map(r=>r.site))].slice(0,8);
   document.getElementById('heatBody').innerHTML=sites.map(s=>{
     const rr=allRows.filter(r=>r.site===s),co=rr[0]?.county||'';
     return`<tr><td>${s}</td><td>${co}</td>${hv.map(({v,t})=>{const val=pct(rr,v);return`<td><span class="hc ${hc(val,t)}">${val}%</span></td>`;}).join('')}</tr>`;
@@ -489,66 +258,36 @@ function renderHeat(){
 }
 function renderActions(){
   const sc={Done:'pd','In Progress':'pp','Overdue':'po'};
-  const rows = actionRows.length ? actionRows : SAMPLE_ACTIONS;
-  document.getElementById('actionBody').innerHTML=rows.map(a=>`<tr>
-    <td>${a.site||a['Site Name']||''}</td>
-    <td>${a.county||a['County']||''}</td>
-    <td>${a.action||a['Action Item']||''}</td>
-    <td>${a.lead||a['Lead']||''}</td>
-    <td>${a.deadline||a['Deadline']||''}</td>
-    <td><span class="pill ${sc[a.status||a['Status']]||'pp'}">${a.status||a['Status']||'Pending'}</span></td>
-  </tr>`).join('');
-}
-function renderVarMap(){
-  const rows=filteredRows.length?filteredRows:allRows;
-  document.getElementById('varGrid').innerHTML=VAR_MAP.map(v=>{
-    const val=pct(rows,v.var);
-    const col=v.target?(val>=v.target?'#86efac':val>=v.target-10?'#fcd34d':'#fca5a5'):'#94a3b8';
-    return`<div class="vm-row"><span class="vm-q">Q${v.q}</span><span style="font-size:10px;color:#94a3b8">${v.label}</span><span class="vm-var">${v.var}</span><span class="vm-val" style="color:${col}">${val}%</span></div>`;
-  }).join('');
+  document.getElementById('actionBody').innerHTML=actionRows.length?actionRows.map(a=>`<tr>
+    <td>${a['Site Name']||a.site||''}</td><td>${a['County']||a.county||''}</td>
+    <td>${a['Action Item']||a.action||''}</td><td>${a['Lead']||a.lead||''}</td>
+    <td>${a['Deadline']||a.deadline||''}</td>
+    <td><span class="pill ${sc[a['Status']||a.status]||'pp'}">${a['Status']||a.status||'Pending'}</span></td>
+  </tr>`).join(''):'<tr><td colspan="6" style="color:#64748b;padding:10px">No action plans found</td></tr>';
 }
 
-async function loadData() {
-  loadConfig();
-  if (CFG.sheetId && CFG.apiKey) {
-    document.getElementById('connStatus') && (document.getElementById('connStatus').textContent='');
-    try {
-      const [aggRows, actRows] = await Promise.all([
-        fetchTab(CFG.aggTab),
-        fetchTab(CFG.actTab).catch(()=>[]),
-      ]);
-      allRows    = normaliseAgg(aggRows);
-      actionRows = actRows;
-      document.getElementById('trendBadge').textContent = 'Live';
-      document.getElementById('trendBadge').className = 'badge';
-      document.getElementById('statusDot').className = 'dot';
-      document.getElementById('bannerText').innerHTML =
-        `<b>${allRows.length}</b> records from Google Sheets &nbsp;&middot;&nbsp; Last sync: <b>${new Date().toLocaleTimeString()}</b>`;
-      populateFilters(); applyFilters(); return;
-    } catch(e) {
-      document.getElementById('bannerText').innerHTML =
-        `Could not reach Google Sheets &mdash; <b>${e.message}</b> &mdash; showing sample data`;
-    }
+async function loadData(){
+  document.getElementById('statusDot').className='dot grey';
+  document.getElementById('bannerText').textContent='Connecting to Google Sheets...';
+  try{
+    const res = await fetch(APPS_SCRIPT_URL + '?format=json');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const json = await res.json();
+    allRows    = normalise(json.data||[]);
+    actionRows = json.actions||[];
+    document.getElementById('statusDot').className='dot';
+    document.getElementById('bannerText').innerHTML=
+      '<b>'+allRows.length+'</b> records from Google Sheets &nbsp;&middot;&nbsp; Last sync: <b>'+new Date().toLocaleTimeString()+'</b>';
+    populateFilters();
+    applyFilters();
+  }catch(e){
+    document.getElementById('statusDot').className='dot grey';
+    document.getElementById('bannerText').innerHTML='Could not load data: '+e.message+' &mdash; check Apps Script URL';
+    document.getElementById('kpiRow').innerHTML='<div style="color:#ef4444;padding:20px;font-size:12px;text-align:center">Failed to connect to Google Sheets.<br>Check the APPS_SCRIPT_URL in this file.</div>';
   }
-  allRows = makeSample(); actionRows = SAMPLE_ACTIONS;
-  document.getElementById('trendBadge').textContent = 'Sample';
-  document.getElementById('trendBadge').className = 'badge-grey';
-  document.getElementById('statusDot').className = 'dot grey';
-  document.getElementById('bannerText').innerHTML =
-    `<b>${allRows.length}</b> sample records &mdash; click <b>Google Sheets</b> to connect live data`;
-  populateFilters(); applyFilters();
 }
 
-// auto-open config if no credentials saved, else load directly
-loadConfig();
-if (!CFG.sheetId || !CFG.apiKey) {
-  document.getElementById('configModal').classList.remove('hidden');
-  allRows = makeSample(); actionRows = SAMPLE_ACTIONS;
-  populateFilters(); applyFilters();
-} else {
-  document.getElementById('configModal').classList.add('hidden');
-  loadData();
-}
+loadData();
 </script>
 </body>
 </html>
